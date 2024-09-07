@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Upload</title>
+</head>
+<body>
+    <h1>Upload Your Photo</h1>
+    <form id="photoForm" enctype="multipart/form-data">
+        <input type="file" id="photoInput" name="photo" accept="image/*" required>
+        <br><br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <script>
+        document.getElementById('photoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            var photoInput = document.getElementById('photoInput').files[0];
+
+            if (photoInput) {
+                formData.append('photo', photoInput);
+
+                fetch('https://hook.make.com/YOUR_MAKE_WEBHOOK_URL', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Photo uploaded successfully!');
+                    } else {
+                        alert('Failed to upload photo');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error uploading photo');
+                });
+            } else {
+                alert('Please select a photo to upload.');
+            }
+        });
+    </script>
+</body>
+</html>
